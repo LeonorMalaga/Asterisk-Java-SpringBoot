@@ -1,8 +1,12 @@
 document.getElementById('apiButton').addEventListener('click', function () {
     // Example API (you can replace this with the API you want to use)
-    const apiUrl = 'https://jsonplaceholder.typicode.com/todos/1';
+    const apiUrl = 'http://localhost:8080/task/';
 
-    fetch(apiUrl)
+    fetch(apiUrl,
+        {method:"GET", 
+          headers: {
+            "Content-Type": 'application/x-www-form-urlencoded'
+          }})
         .then(response => response.json())
         .then(data => {
             // Handle the response and display it
