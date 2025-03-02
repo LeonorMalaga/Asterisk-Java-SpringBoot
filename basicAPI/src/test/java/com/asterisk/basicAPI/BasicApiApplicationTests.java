@@ -1,10 +1,10 @@
-package com.asterisk.API;
+package com.asterisk.basicAPI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiApplicationTests {
+class BasicApiApplicationTests {
 
 	@Test
 	void contextLoads() {

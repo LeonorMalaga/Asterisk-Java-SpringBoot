@@ -62,10 +62,22 @@ In your browser open: http://localhost:8000/
 1. Go to https://start.spring.io/ set maven. 
 2. Add dependences : SpringWeb, Spring Boot DevTools, Spring Data JPA, Lombok and MySQLDriver.
 
-![CreateProject](Dependences.png)
+![CreateProject](Dependences.png) 
 
 4. I use Hexagonal Architecture: 
 - Model folder (Domain Layer) forcore - business logic(Entities).
 - Repositories folder (Adapters) for persistence.
 - Services folder for Business use case.
 - Controller folder for Interact with the external world.
+
+5. If you are using IntelliJ in MAC you need to permit it acces to the network, steps.
+ * System Settings ➡ Privacy & Security ➡ Full Disk Access and Network and Developer Tools
+ * add IntelliJ and your java bin
+ * to get java bin location, in the console execute:
+ * sudo /usr/libexec/java_home
+ * /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
+ * And add to firewall
+ * sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
+ * sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
+ * check /usr/libexec/ApplicationFirewall/socketfilterfw --listapps
+ * I need to test with socket with ACL

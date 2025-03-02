@@ -1,6 +1,6 @@
 document.getElementById('apiButton').addEventListener('click', function () {
     // Example API (you can replace this with the API you want to use)
-    const apiUrl = 'http://localhost:8080/task/';
+    const apiUrl = 'http://localhost:8080/api/ExtensionsStateList';
 
     fetch(apiUrl,
         {method:"GET", 
