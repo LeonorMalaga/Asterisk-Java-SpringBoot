@@ -1,5 +1,6 @@
 # Description
 Basic general API to get information from an Asterisk and manage the flow of calls.
+![Postman use example](ExtensionStateList.png)
 
 # STEPs for RUN
 
@@ -71,13 +72,17 @@ In your browser open: http://localhost:8000/
 - Controller folder for Interact with the external world.
 
 5. If you are using IntelliJ in MAC you need to permit it acces to the network, steps.
- * System Settings ➡ Privacy & Security ➡ Full Disk Access and Network and Developer Tools
- * add IntelliJ and your java bin
- * to get java bin location, in the console execute:
- * sudo /usr/libexec/java_home
- * /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
- * And add to firewall
- * sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
- * sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
- * check /usr/libexec/ApplicationFirewall/socketfilterfw --listapps
- * I need to test with socket with ACL
+ - System Settings ➡ Privacy & Security ➡ Full Disk Access and Network and Developer Tools
+ - add IntelliJ and your java bin
+ - to get java bin location, in the console execute:
+ ```
+  sudo /usr/libexec/java_home
+ /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/jav
+ ```
+ -And add to firewall
+ ```
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
+
+ sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblockapp /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java
+ ```
+ (*pending socket with ACL)

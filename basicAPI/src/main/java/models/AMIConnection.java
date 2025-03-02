@@ -11,7 +11,7 @@ public class AMIConnection {
         this.ip = "192.168.1.143";
         this.port = 5038;
     }
-    public AMIConnection(String user, String pass, String ip, int port){
+    public AMIConnection( String ip, int port, String user, String pass){
         this.user = user;
         this.pass = pass;
         this.ip = ip;

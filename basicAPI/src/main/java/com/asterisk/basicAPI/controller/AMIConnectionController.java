@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @CrossOrigin(origins = "http://localhost:8000/", allowedHeaders = "*")
 @RestController
@@ -15,9 +18,19 @@ import org.springframework.web.bind.annotation.*;
 public class AMIConnectionController {
     @Autowired
     AMIConnectionService amiConnection;
+    @PostMapping("/ExtensionsStateList")
+    public ResponseEntity<List<Map<String, String>>> ExtensionsStateList(
+            @RequestBody AMIConnection request
+    ) {
+        // Create AMIConnection using request data
+        AMIConnection ami = new AMIConnection(request.getIp(), request.getPort(), request.getUser(), request.getPass());
+
+        // Return the response
+        return ResponseEntity.ok().body(amiConnection.ExtensionsStateList(ami));
+    }
     @GetMapping("/ExtensionsStateList")
-    public ResponseEntity<ResponseMessage> ExtensionsStateList(){
+    public ResponseEntity<List<Map<String, String>>>ExtensionsStateList(){
         AMIConnection ami = new AMIConnection();
-        return ResponseEntity.ok().body(new ResponseMessage(amiConnection.ExtensionsStateList( ami )));
+        return ResponseEntity.ok().body(amiConnection.ExtensionsStateList( ami ));
     }
 }

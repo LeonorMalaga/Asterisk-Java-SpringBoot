@@ -4,7 +4,10 @@ import models.AMIConnection;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.net.telnet.TelnetClient;
 /**
@@ -23,11 +26,12 @@ public class AMIConnectionService {
      * @param timeout The maximun
      * @return The result as a String.
      */
-    public String ExtensionsStateList(AMIConnection ami, int maxIterationCount, int timeout) {
+    public List<Map<String, String>> ExtensionsStateList(AMIConnection ami, int maxIterationCount, int timeout) {
 
         TelnetClient telnet = new TelnetClient();
         String line = "";
         String result = "";
+        List<Map<String, String>> jsonResult = new ArrayList<>();
         int iterationCount = 0;
         try {
             telnet.setDefaultTimeout(5000);
@@ -86,32 +90,70 @@ public class AMIConnectionService {
                 }
                 iterationCount++;
             }
-
             telnet.disconnect();
             System.out.println("Disconnected");
-            return result;
+            return this.parseResponseToJson(result);
 
         } catch (IOException e) {
             System.out.println("Failed to connect");
-            e.printStackTrace();
-            return "Failed to connect";
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("error", "Failed to connect");
+            jsonResult.add(errorMap);
+            return jsonResult;
         }finally {
             if (telnet.isConnected()) {
                 try {
                     telnet.disconnect();
-                    System.out.println("Telnet Desconectado");
+                    System.out.println("disconnected");
                 } catch (IOException e) {
-                    System.out.println("Error al desconectar");
+                    System.out.println("Action ExtensionStateListComplete can't AMI disconnected in "+ ami.getIp()+":"+ami.getPort());
                 }
             }
         }
     }
-    public String ExtensionsStateList(AMIConnection ami, int maxIterationCount) {
+    public List<Map<String, String>> ExtensionsStateList(AMIConnection ami, int maxIterationCount) {
         return this.ExtensionsStateList(ami,maxIterationCount,5000);
     }
-    public String ExtensionsStateList(AMIConnection ami) {
+    public List<Map<String, String>> ExtensionsStateList(AMIConnection ami) {
         return this.ExtensionsStateList(ami,20000,5000);
     }
+    //-------------------------- Auxiliary methods------------------------------//
+    /**
+     * Parses the output of "Action: ExtensionStateList" and converts it into a JSON representation.
+     * <p>
+     * extracting relevant details :extension number, status, and context.
+     * </p>
+     *
+     * @param rawResponse The raw response string containing extension status information.
+     *                    Each line represents a key-value pair or a new event.
+     * @return A formatted JSON string representing a list of extensions with their status,
+     *         or an error message if JSON conversion fails.
+     */
+    private List<Map<String, String>> parseResponseToJson(String rawResponse) {
+        List<Map<String, String>> extensions = new ArrayList<>();
+        String[] lines = rawResponse.split("\n");
 
+        Map<String, String> currentExtension = null;
 
+        for (String line : lines) {
+            if (line.startsWith("Event: ExtensionStatus")) {
+                if (currentExtension != null) {
+                    extensions.add(currentExtension);
+                }
+                currentExtension = new HashMap<>();
+            } else if (line.startsWith("Exten:")) {
+                currentExtension.put("exten", line.substring("Exten:".length()).trim());
+            } else if (line.startsWith("StatusText:")) {
+                currentExtension.put("status", line.substring("StatusText:".length()).trim());
+            } else if (line.startsWith("Context:")) {
+                currentExtension.put("context", line.substring("Context:".length()).trim());
+            }
+        }
+        // Add the last extension if it exists
+        if (currentExtension != null) {
+            extensions.add(currentExtension);
+        }
+        // Convert the list to JSON
+        return extensions;
+    }
 }
